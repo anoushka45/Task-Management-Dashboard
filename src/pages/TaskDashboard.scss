@@ -1,0 +1,21 @@
+$primary-color: #1976d2;  // Blue color for buttons and links
+$secondary-color: #f50057; // Red color for delete buttons
+$background-color: #f4f6f8; // Light background color
+
+$card-background: white; // Card background color
+$border-radius: 8px; // Rounded corners for cards
+$spacing-unit: 12px; // Consistent spacing
+
+/* General styles for the dashboard */
+.task-dashboard {
+  padding: $spacing-unit;
+
+  h4 {
+    color: black;
+    font-weight: 600;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+}

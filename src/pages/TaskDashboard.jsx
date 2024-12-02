@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { addTask, deleteTask, markAsCompleted, setFilter, reorderTasks } from '../store/taskSlice';
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 import { useNavigate } from 'react-router-dom';
+import './TaskDashboard.scss'; // Import the SCSS file
 
 const TaskDashboard = () => {
   const [taskTitle, setTaskTitle] = useState('');
@@ -16,7 +17,7 @@ const TaskDashboard = () => {
   const tasks = useSelector((state) => state.tasks.tasks);
   const filter = useSelector((state) => state.tasks.filter);
   const dispatch = useDispatch();
-  const navigate = useNavigate(); // for navigation
+  const navigate = useNavigate();
 
   const handleAddTask = () => {
     if (taskTitle && taskDescription && taskDueDate) {
@@ -85,14 +86,14 @@ const TaskDashboard = () => {
   };
 
   const handleEditTask = (taskId) => {
-    navigate(`/tasks/${taskId}`); // Navigate to task details page
+    navigate(`/tasks/${taskId}`);
   };
 
   return (
-    <div>
-      <Typography variant="h4" gutterBottom>Task Management Dashboard</Typography>
+    <div className="task-dashboard">
+      <Typography variant="h4" gutterBottom> Task Dashboard</Typography>
 
-      <FormControl fullWidth margin="normal">
+      <FormControl fullWidth margin="normal" className="filter-section">
         <InputLabel>Filter Tasks</InputLabel>
         <Select value={filter} onChange={handleFilterChange}>
           <MenuItem value="all">All Tasks</MenuItem>
@@ -109,11 +110,12 @@ const TaskDashboard = () => {
         value={searchQuery}
         onChange={handleSearchChange}
         margin="normal"
+        className="search-section"
       />
 
-      <Grid container spacing={2}>
+      <Grid container spacing={2} className="task-list">
         <Grid item xs={12} sm={6}>
-          <Card>
+          <Card className="task-card">
             <CardContent>
               <Typography variant="h6" gutterBottom>Add a New Task</Typography>
               <TextField label="Task Title" fullWidth value={taskTitle} onChange={(e) => setTaskTitle(e.target.value)} margin="normal" />
@@ -125,7 +127,7 @@ const TaskDashboard = () => {
         </Grid>
 
         <Grid item xs={12}>
-          <Card>
+          <Card className="task-card">
             <CardContent>
               <Typography variant="h6" gutterBottom>Task List</Typography>
 
@@ -136,24 +138,40 @@ const TaskDashboard = () => {
                       {filteredTasks.map((task, index) => (
                         <Draggable key={task.id} draggableId={task.id.toString()} index={index}>
                           {(provided) => (
-                            <Card ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps} sx={{ marginBottom: 2 }} key={task.id}>
+                            <Card ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps} className="task-card" key={task.id}>
                               <CardContent>
                                 <Typography variant="h6">{task.title}</Typography>
                                 <Typography variant="body2">{task.description}</Typography>
-                                <Typography variant="caption" color="textSecondary">Due: {task.dueDate}</Typography>
-                                <div style={{ marginTop: '10px' }}>
-                                  <Button variant="contained" color="secondary" onClick={() => handleMarkAsCompleted(task.id)} disabled={task.completed}>
+                                <Typography variant="body2" color="textSecondary">{task.dueDate}</Typography>
+                                <div className="task-actions">
+                                  <Button
+                                    className="mark-completed"
+                                    variant="contained"
+                                    onClick={() => handleMarkAsCompleted(task.id)}
+                                    disabled={task.completed}
+                                  >
                                     {task.completed ? 'Completed' : 'Mark as Completed'}
                                   </Button>
-                                  <Button variant="outlined" color="error" onClick={() => openDeleteModal(task.id)} style={{ marginLeft: '10px' }}>Delete</Button>
-                                  <Button variant="outlined" color="primary" onClick={() => handleEditTask(task.id)} style={{ marginLeft: '10px' }}>Edit</Button>
+                                  <Button
+                                    className="delete-task"
+                                    variant="contained"
+                                    onClick={() => openDeleteModal(task.id)}
+                                  >
+                                    Delete
+                                  </Button>
+                                  <Button
+                                    className="edit-task"
+                                    variant="contained"
+                                    onClick={() => handleEditTask(task.id)}
+                                  >
+                                    Edit
+                                  </Button>
                                 </div>
                               </CardContent>
                             </Card>
                           )}
                         </Draggable>
                       ))}
-                      {provided.placeholder}
                     </div>
                   )}
                 </Droppable>
@@ -163,10 +181,12 @@ const TaskDashboard = () => {
         </Grid>
       </Grid>
 
+      {filteredTasks.length === 0 && <div className="no-tasks-message">No tasks available. Please add some tasks.</div>}
+
       <Dialog open={openModal} onClose={closeDeleteModal}>
-        <DialogTitle>Confirm Deletion</DialogTitle>
+        <DialogTitle>Delete Task</DialogTitle>
         <DialogContent>
-          <Typography>Are you sure you want to delete this task?</Typography>
+          Are you sure you want to delete this task?
         </DialogContent>
         <DialogActions>
           <Button onClick={closeDeleteModal} color="primary">Cancel</Button>
