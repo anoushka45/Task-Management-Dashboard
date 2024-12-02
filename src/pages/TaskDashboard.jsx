@@ -5,6 +5,7 @@ import { addTask, deleteTask, markAsCompleted, setFilter, reorderTasks } from '.
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 import { useNavigate } from 'react-router-dom';
 import NoTask from '../assets/noTasks.jpg'; // Path to your logo image file
+import NoChart from '../assets/charts.jpg'; // Path to your logo image file
 import { PieChart, Pie, Cell, ResponsiveContainer } from 'recharts'; // Importing chart components
 import './TaskDashboard.scss'; // Import the SCSS file
 
@@ -98,7 +99,7 @@ const TaskDashboard = () => {
   };
 
   const handleEditTask = (taskId) => {
-    navigate(`/tasks/${taskId}`);
+    navigate(`/${taskId}`);
   };
 
   return (
@@ -165,71 +166,110 @@ const TaskDashboard = () => {
 
         {/* Task List */}
         <Grid item xs={12} sm={6} md={6}>
-          <Card className="task-card" style={{ height: '100%' }}>
-            <CardContent>
-              <Typography variant="h6" gutterBottom>Task List</Typography>
-              {filteredTasks.length === 0 ? (
-                <div className="no-tasks-message" style={{ textAlign: 'center', padding: '20px' }}>
-                  <img src={NoTask} alt="No tasks" style={{ width: '250px', marginBottom: '20px' }} />
-                  <Typography variant="body1">No tasks available. Please add some tasks.</Typography>
-                </div>
-              ) : (
-                <DragDropContext onDragEnd={handleOnDragEnd}>
-                  <Droppable droppableId="taskList">
+  <Card className="task-card" style={{ height: '100%' }}>
+    <CardContent>
+      <Typography variant="h6" gutterBottom>
+        Task List ({filteredTasks.length})
+      </Typography>
+      {filteredTasks.length === 0 ? (
+        <div className="no-tasks-message" style={{ textAlign: 'center', padding: '20px' }}>
+          <img src={NoTask} alt="No tasks" style={{ width: '250px', marginBottom: '20px' }} />
+          <Typography variant="body1">No tasks available. Please add some tasks.</Typography>
+        </div>
+      ) : (
+        <DragDropContext onDragEnd={handleOnDragEnd}>
+          <Droppable droppableId="taskList">
+            {(provided) => (
+              <div
+                ref={provided.innerRef}
+                {...provided.droppableProps}
+                style={{
+                  maxHeight: '400px', // Adjust this value as needed
+                  overflowY: 'auto',  // Enables vertical scrolling
+                  paddingRight: '10px', // Prevents content from being hidden due to the scrollbar
+                }}
+              >
+                {filteredTasks.map((task, index) => (
+                  <Draggable key={task.id} draggableId={task.id.toString()} index={index}>
                     {(provided) => (
-                      <div ref={provided.innerRef} {...provided.droppableProps}>
-                        {filteredTasks.map((task, index) => (
-                          <Draggable key={task.id} draggableId={task.id.toString()} index={index}>
-                            {(provided) => (
-                              <Card ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps} className="task-card" key={task.id}>
-                                <CardContent>
-                                  <Typography variant="h6">{task.title}</Typography>
-                                  <Typography variant="body2">{task.description}</Typography>
-                                  <Typography variant="body2" color="textSecondary">{task.dueDate}</Typography>
-                                  <div className="task-actions">
-                                    <Button className="mark-completed" variant="contained" onClick={() => handleMarkAsCompleted(task.id)} disabled={task.completed}>
-                                      {task.completed ? 'Completed' : 'Mark as Completed'}
-                                    </Button>
-                                    <Button className="delete-task" variant="contained" onClick={() => openDeleteModal(task.id)}>
-                                      Delete
-                                    </Button>
-                                    <Button className="edit-task" variant="contained" onClick={() => handleEditTask(task.id)}>
-                                      Edit
-                                    </Button>
-                                  </div>
-                                </CardContent>
-                              </Card>
-                            )}
-                          </Draggable>
-                        ))}
-                      </div>
+                      <Card
+                        ref={provided.innerRef}
+                        {...provided.draggableProps}
+                        {...provided.dragHandleProps}
+                        className="task-card"
+                        key={task.id}
+                      >
+                        <CardContent>
+                          <Typography variant="h6">{task.title}</Typography>
+                          <Typography variant="body2">{task.description}</Typography>
+                          <Typography variant="body2" color="textSecondary">{task.dueDate}</Typography>
+                          <div className="task-actions">
+                            <Button
+                              className="mark-completed"
+                              variant="contained"
+                              onClick={() => handleMarkAsCompleted(task.id)}
+                              disabled={task.completed}
+                            >
+                              {task.completed ? 'Completed' : 'Mark as Completed'}
+                            </Button>
+                            <Button className="delete-task" variant="contained" onClick={() => openDeleteModal(task.id)}>
+                              Delete
+                            </Button>
+                            <Button className="edit-task" variant="contained" onClick={() => handleEditTask(task.id)}>
+                              Edit
+                            </Button>
+                          </div>
+                        </CardContent>
+                      </Card>
                     )}
-                  </Droppable>
-                </DragDropContext>
-              )}
-            </CardContent>
-          </Card>
-        </Grid>
+                  </Draggable>
+                ))}
+              </div>
+            )}
+          </Droppable>
+        </DragDropContext>
+      )}
+    </CardContent>
+  </Card>
+</Grid>
+
       </Grid>
 
-      {/* Task Summary - Pie Chart */}
       <Grid container spacing={2}>
-        <Grid item xs={12} sm={6} md={6}>
-          <Card className="task-summary-card">
-            <CardContent>
-              <Typography variant="h6" gutterBottom>Task Summary</Typography>
-              <ResponsiveContainer width="100%" height={300}>
-                <PieChart>
-                  <Pie data={data} dataKey="value" nameKey="name" cx="50%" cy="50%" outerRadius={80} fill="#8884d8">
-                    <Cell fill="#82ca9d" />
-                    <Cell fill="#ff7300" />
-                  </Pie>
-                </PieChart>
-              </ResponsiveContainer>
-            </CardContent>
-          </Card>
-        </Grid>
-      </Grid>
+  <Grid item xs={12} sm={12} md={12}>
+    <Card className="task-summary-card">
+      <CardContent>
+        <Typography variant="h6" gutterBottom>Task Summary</Typography>
+        {tasks.length === 0 ? (
+          <div className="no-tasks-message" style={{ textAlign: 'center', padding: '20px' }}>
+            <img src={NoChart} alt="No tasks" style={{ width: '450px', marginBottom: '20px' }} />
+            <Typography variant="body1">No tasks available to summarize. Please add some tasks.</Typography>
+          </div>
+        ) : (
+          <div>
+            <ResponsiveContainer width="100%" height={300}>
+              <PieChart>
+                <Pie data={data} dataKey="value" nameKey="name" cx="50%" cy="50%" outerRadius={100} fill="#8884d8">
+                  <Cell fill="#82ca9d" />
+                  <Cell fill="#ff7300" />
+                </Pie>
+              </PieChart>
+            </ResponsiveContainer>
+            <div style={{ textAlign: 'center', marginTop: '20px' }}>
+              <Typography variant="body1" style={{ color: '#82ca9d' }}>
+                <strong>Completed Tasks</strong>: {completedCount}
+              </Typography>
+              <Typography variant="body1" style={{ color: '#ff7300' }}>
+                <strong>Pending Tasks</strong>: {pendingCount}
+              </Typography>
+            </div>
+          </div>
+        )}
+      </CardContent>
+    </Card>
+  </Grid>
+</Grid>
+
 
       {/* Task Deletion Modal */}
       <Dialog open={openModal} onClose={closeDeleteModal}>

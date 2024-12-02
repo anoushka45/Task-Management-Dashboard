@@ -1,12 +1,7 @@
-$primary-color: #1976d2;  // Blue color for buttons and links
-$secondary-color: #f50057; // Red color for delete buttons
-$background-color: #f4f6f8; // Light background color
+$card-background: white; 
+$border-radius: 8px; 
+$spacing-unit: 26px; 
 
-$card-background: white; // Card background color
-$border-radius: 8px; // Rounded corners for cards
-$spacing-unit: 26px; // Consistent spacing
-
-/* General styles for the dashboard */
 .task-dashboard {
   padding: $spacing-unit;
 
@@ -60,3 +55,130 @@ $spacing-unit: 26px; // Consistent spacing
 }
 
 
+// Base Styling for Cards and Layout
+.task-card {
+  border-radius: 12px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  
+  
+
+  &:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+  }
+
+  .MuiCardContent-root {
+    padding: 20px;
+  }
+
+  .task-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 10px;
+
+    button {
+      flex: 1;
+      font-size: 14px;
+      text-transform: none;
+      transition: background-color 0.3s ease;
+
+      &:hover {
+        background-color: rgba(0, 0, 0, 0.08);
+      }
+
+      &.mark-completed {
+        background-color: #4caf50;
+        color: white;
+        &:disabled {
+          background-color: #d1e7d1;
+          color: #4caf50;
+        }
+      }
+
+      &.delete-task {
+        background-color: #f44336;
+        color: white;
+      }
+
+      &.edit-task {
+        background-color: #2196f3;
+        color: white;
+      }
+
+      // Apply purple color for action buttons
+      &.purple-button {
+        background-color: #613DC1;
+        color: white;
+        &:hover {
+          background-color: #4e2b9f; // Slightly darker shade on hover
+        }
+      }
+    }
+  }
+}
+
+// Task Summary Section (Pie Chart)
+.task-summary-card {
+  border-radius: 12px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  margin-top: 20px;
+  padding: 20px;
+
+  &:hover {
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+  }
+
+  .MuiTypography-root {
+    margin-bottom: 10px;
+    color: #613DC1; // Applying purple to the title
+  }
+}
+
+// Grid Layout Adjustments
+.MuiGrid-container {
+  margin-top: 20px;
+
+  .MuiGrid-item {
+    padding: 20px;
+  }
+
+  .no-tasks-message {
+    text-align: center;
+    padding: 20px;
+    color: #888;
+    font-size: 1.1rem;
+    font-weight: 300;
+  }
+}
+
+// Hover Effect for Empty Tasks Section
+.no-tasks-message img {
+  max-width: 200px;
+  transition: transform 0.3s ease;
+
+  &:hover {
+    transform: scale(1.1);
+  }
+}
+
+// Input Fields and Buttons
+.MuiTextField-root {
+  margin-bottom: 15px;
+}
+
+.MuiButton-root {
+  margin-top: 15px;
+  font-size: 14px;
+  padding: 10px 0;
+  text-transform: none;
+
+  &:hover {
+    background-color: #3f51b5;
+  }
+
+  &.MuiButton-containedPrimary {
+    background-color: #613DC1; // Purple color for the primary button
+    color: white;
+  }
+}

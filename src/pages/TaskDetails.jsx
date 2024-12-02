@@ -73,7 +73,7 @@ const TaskDetails = () => {
       completed: task.completed,
     };
     dispatch(updateTask(updatedTask));
-    navigate('/tasks'); // Redirect after saving
+    navigate('/'); // Redirect after saving
   };
 
   return (
