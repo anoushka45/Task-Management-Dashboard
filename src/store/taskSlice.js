@@ -2,6 +2,8 @@ import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
   tasks: [],
+  filter: 'all', // Default filter is 'All Tasks'
+
 };
 
 const taskSlice = createSlice({
@@ -32,8 +34,20 @@ const taskSlice = createSlice({
     setTasks: (state, action) => {
       state.tasks = action.payload;
     },
+    setFilter: (state, action) => {
+      state.filter = action.payload;
+    },
+    reorderTasks: (state, action) => {
+      state.tasks = action.payload;
+    },
+    updateTask: (state, action) => {
+      const index = state.tasks.findIndex(task => task.id === action.payload.id);
+      if (index !== -1) {
+        state.tasks[index] = action.payload;
+      }
+    },
   },
 });
 
-export const { addTask, editTask, deleteTask, markAsCompleted, setTasks } = taskSlice.actions;
+export const { addTask, editTask, deleteTask, markAsCompleted, setTasks ,setFilter,reorderTasks, updateTask} = taskSlice.actions;
 export default taskSlice.reducer;
