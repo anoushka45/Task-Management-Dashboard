@@ -30,17 +30,17 @@ $spacing-unit: 26px;
   
   .filter-section,
   .search-section {
-    /* Ensures even spacing */
+   
     
     .MuiInputLabel-root {
-      color: #6c757d; /* Lighter label color */
+      color: #6c757d; 
     }
 
     .MuiOutlinedInput-root {
       border-radius: 8px; 
-      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
       &:hover {
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15); /* Hover effect */
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15); 
       }
     }
 
@@ -53,13 +53,13 @@ $spacing-unit: 26px;
     }
 
     &:focus-within .MuiOutlinedInput-notchedOutline {
-      border-color: #0056b3; /* Darker blue on focus */
+      border-color: #0056b3; 
     }
   }
 }
 
 
-// Base Styling for Cards and Layout
+
 .task-card {
   border-radius: 12px;
   box-shadow: 0 4px 8px rgba(0.1, 0.01, 0.1, 0.1);
@@ -68,7 +68,7 @@ $spacing-unit: 26px;
 
   .card-title{
     margin-bottom: 10px;
-    color: #471dbb; // Applying purple to the title
+    color: #471dbb; 
   }
 
   &:hover {
@@ -112,19 +112,17 @@ $spacing-unit: 26px;
         color: white;
       }
 
-      // Apply purple color for action buttons
       &.purple-button {
         background-color: #613DC1;
         color: white;
         &:hover {
-          background-color: #4e2b9f; // Slightly darker shade on hover
+          background-color: #4e2b9f; 
         }
       }
     }
   }
 }
 
-// Task Summary Section (Pie Chart)
 .task-summary-card {
   border-radius: 12px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.01);
@@ -138,7 +136,6 @@ $spacing-unit: 26px;
  
 }
 
-// Grid Layout Adjustments
 .MuiGrid-container {
   margin-top: 20px;
 
@@ -155,7 +152,6 @@ $spacing-unit: 26px;
   }
 }
 
-// Hover Effect for Empty Tasks Section
 .no-tasks-message img {
   max-width: 200px;
   transition: transform 0.3s ease;
@@ -165,7 +161,6 @@ $spacing-unit: 26px;
   }
 }
 
-// Input Fields and Buttons
 .MuiTextField-root {
   margin-bottom: 15px;
 }
@@ -181,7 +176,7 @@ $spacing-unit: 26px;
   }
 
   &.MuiButton-containedPrimary {
-    background-color: #613DC1; // Purple color for the primary button
+    background-color: #613DC1; 
     color: white;
   }
 }

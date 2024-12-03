@@ -39,7 +39,10 @@ const TaskDetails = () => {
   return (
     <Card className="card-container">
       <CardContent>
-        <Typography variant="h5" className="card-header">
+        <Typography variant="h5" className="card-header"
+        style={{fontWeight:"bold"}}
+
+        >
           <AddCircle className="icon" />
           Edit Task
         </Typography>

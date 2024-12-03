@@ -85,11 +85,11 @@ const TaskDashboard = () => {
     return task.title.toLowerCase().includes(searchQuery.toLowerCase());
   });
 
-  // Task summary counts
+
   const completedCount = tasks.filter(task => task.completed).length;
   const pendingCount = tasks.filter(task => !task.completed).length;
 
-  // Chart data
+ 
   const data = [
     { name: 'Completed', value: completedCount },
     { name: 'Pending', value: pendingCount },
@@ -97,7 +97,7 @@ const TaskDashboard = () => {
 
   const normalizedData = data.map((item) => ({
     ...item,
-    value: Math.round(item.value), // Round to nearest integer
+    value: Math.round(item.value), 
   }));
   const openDeleteModal = (taskId) => {
     setTaskToDelete(taskId);
@@ -231,12 +231,12 @@ const TaskDashboard = () => {
                                 {...provided.dragHandleProps}
                                 className=" "
                                 style={{
-                                  marginBottom: '10px', // Ensures spacing between tasks while dragging
-                                  ...provided.draggableProps.style, // This ensures smooth dragging behavior
+                                  marginBottom: '10px', 
+                                  ...provided.draggableProps.style, 
                                   boxSizing: 'border-box',
                                   boxShadow:'none',
                                   border:'0.5px solid #D3D3D3'
-                                  // Prevents layout shift during dragging
+                                 
                                 }}
                               >
                                 <CardContent >
@@ -274,7 +274,7 @@ const TaskDashboard = () => {
                             )}
                           </Draggable>
                         ))}
-                        {provided.placeholder} {/* Ensures that the space is reserved during drag */}
+                        {provided.placeholder} {}
                       </div>
                     )}
                   </Droppable>
@@ -334,7 +334,7 @@ const TaskDashboard = () => {
       </Grid>
 
 
-      {/* Task Deletion Modal */}
+   
       <Dialog open={openModal} onClose={closeDeleteModal}>
         <DialogTitle>Delete Task</DialogTitle>
         <DialogContent>

@@ -1,8 +1,9 @@
 import React from 'react';
-import { Typography, List, ListItem, ListItemText } from '@mui/material';
+import { Typography } from '@mui/material';
 import styled from 'styled-components';
 import { Card, CardContent,useMediaQuery, useTheme } from '@mui/material';
-// Container for the main content
+
+
 const Container = styled.div`
   padding: 60px;
   border-radius: 10px;
@@ -12,7 +13,7 @@ const Container = styled.div`
   margin: 20px auto;
 `;
 
-// Title Section
+
 const SectionTitle = styled(Typography)`
   margin-bottom: 16px;
   color: #613dc1;
@@ -20,7 +21,7 @@ const SectionTitle = styled(Typography)`
   font-size: 2.5rem;
 `;
 
-// Descriptive text
+
 const Description = styled(Typography)`
   margin-bottom: 20px;
   font-size: 1.2rem;
@@ -30,13 +31,15 @@ const Description = styled(Typography)`
   text-align: justify;
 `;
 
-// Footer Text with a bit of spacing
+
 const FooterText = styled(Typography)`
   margin-top: 40px;
   font-size: 1.1rem;
   color: #444;
   text-align: center;
 `;
+
+
 
 const tasks = [
   { title: "1. Add a New Task", description: "Easily add a new task by providing a title, description, and due date. Tasks are added dynamically to the task list." },
@@ -49,14 +52,13 @@ const tasks = [
   { title: "8. No Tasks Message", description: "If no tasks are available, a friendly message with an image is displayed to guide users to add tasks." },
 ];
 
-// About Component
 const About = () => {
   const theme = useTheme();
   const isSmallScreen = useMediaQuery(theme.breakpoints.down('sm')); 
   return (
     <Container>
        <Typography
-        variant={isSmallScreen ? 'h5' : 'h4'} // Adjust title size for responsiveness
+        variant={isSmallScreen ? 'h5' : 'h4'} 
         gutterBottom
 style={{fontWeight:"bold"}}
 
@@ -65,7 +67,7 @@ style={{fontWeight:"bold"}}
       </Typography>
 
       <Typography
-        variant={isSmallScreen ? 'body1' : 'h6'} // Adjust description size for responsiveness
+        variant={isSmallScreen ? 'body1' : 'h6'}
         paragraph
         style={{color:"#613DC1"}}
       >
