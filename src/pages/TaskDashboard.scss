@@ -2,8 +2,19 @@ $card-background: white;
 $border-radius: 8px; 
 $spacing-unit: 26px; 
 
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+
 .task-dashboard {
   padding: $spacing-unit;
+  animation: fadeIn 0.5s ease-in-out;
 
   h4 {
     color: black;
@@ -16,24 +27,17 @@ $spacing-unit: 26px;
 }
 
 .filter-search-container {
-  display: flex;
-  justify-content: space-between;
-  gap: 20px;
-  flex-wrap: wrap; /* Ensures elements wrap on smaller screens */
-  margin-bottom: 20px;
   
   .filter-section,
   .search-section {
-    flex: 1;
-    max-width: 48%; /* Ensures even spacing */
+    /* Ensures even spacing */
     
     .MuiInputLabel-root {
       color: #6c757d; /* Lighter label color */
-      font-weight: bold; /* Make label text bold */
     }
 
     .MuiOutlinedInput-root {
-      border-radius: 8px; /* Rounded corners for input */
+      border-radius: 8px; 
       box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Subtle shadow */
       &:hover {
         box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15); /* Hover effect */
@@ -41,11 +45,11 @@ $spacing-unit: 26px;
     }
 
     .MuiSelect-root {
-      padding-right: 30px; /* Adds space for dropdown */
+      padding-right: 30px; 
     }
 
     .MuiOutlinedInput-notchedOutline {
-      border-color: #007bff; /* Light blue border color */
+      border-color: #007bff; 
     }
 
     &:focus-within .MuiOutlinedInput-notchedOutline {
@@ -58,18 +62,23 @@ $spacing-unit: 26px;
 // Base Styling for Cards and Layout
 .task-card {
   border-radius: 12px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-  
+  box-shadow: 0 4px 8px rgba(0.1, 0.01, 0.1, 0.1);
+  background-color: $card-background;
   
 
+  .card-title{
+    margin-bottom: 10px;
+    color: #471dbb; // Applying purple to the title
+  }
+
   &:hover {
-    transform: translateY(-10px);
     box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
   }
 
+  
+
   .MuiCardContent-root {
-    padding: 20px;
+    
   }
 
   .task-actions {
@@ -83,10 +92,7 @@ $spacing-unit: 26px;
       text-transform: none;
       transition: background-color 0.3s ease;
 
-      &:hover {
-        background-color: rgba(0, 0, 0, 0.08);
-      }
-
+      
       &.mark-completed {
         background-color: #4caf50;
         color: white;
@@ -97,12 +103,12 @@ $spacing-unit: 26px;
       }
 
       &.delete-task {
-        background-color: #f44336;
+        background-color: #bd1104;
         color: white;
       }
 
       &.edit-task {
-        background-color: #2196f3;
+        background-color: #613DC1;
         color: white;
       }
 
@@ -121,7 +127,7 @@ $spacing-unit: 26px;
 // Task Summary Section (Pie Chart)
 .task-summary-card {
   border-radius: 12px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.01);
   margin-top: 20px;
   padding: 20px;
 
@@ -129,10 +135,7 @@ $spacing-unit: 26px;
     box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
   }
 
-  .MuiTypography-root {
-    margin-bottom: 10px;
-    color: #613DC1; // Applying purple to the title
-  }
+ 
 }
 
 // Grid Layout Adjustments

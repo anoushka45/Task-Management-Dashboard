@@ -17,10 +17,13 @@ import Typography from '@mui/material/Typography';
 import DashboardIcon from '@mui/icons-material/Dashboard';
 import TaskIcon from '@mui/icons-material/Task';
 import SettingsIcon from '@mui/icons-material/Settings';
+import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+import NotificationsIcon from '@mui/icons-material/Notifications';
 import TaskDashboard from '../pages/TaskDashboard';
 import TaskDetails from '../pages/TaskDetails';
 import Logo from '../assets/task.svg';
 import About from '../pages/About';
+
 const drawerWidth = 240;
 
 export default function ResponsiveDrawer() {
@@ -39,7 +42,6 @@ export default function ResponsiveDrawer() {
     <div>
       <Toolbar />
       <Box sx={{ padding: 2, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-        {/* Logo at the top of the sidebar */}
         <img src={Logo} alt="logo" style={{ width: '50%', marginBottom: 20 }} />
       </Box>
 
@@ -65,22 +67,39 @@ export default function ResponsiveDrawer() {
           position="fixed"
           sx={{
             zIndex: (theme) => theme.zIndex.drawer + 1,
-            backgroundColor: '#613dc1', // Set navbar color
+            backgroundColor: '#613dc1',
+            display: 'flex',
+            justifyContent: 'space-between',
           }}
         >
-          <Toolbar>
-            <IconButton
-              color="inherit"
-              aria-label="open drawer"
-              edge="start"
-              onClick={handleDrawerToggle}
-              sx={{ mr: 2, display: { md: 'none' } }}
-            >
-              <MenuIcon />
-            </IconButton>
-            <Typography variant="h6" noWrap component="div">
-              TaskFlow
-            </Typography>
+          <Toolbar sx={{ display: 'flex', justifyContent: 'space-between', width: '100%' }}>
+            <Box sx={{ display: 'flex', alignItems: 'center' }}>
+              <IconButton
+                color="inherit"
+                aria-label="open drawer"
+                edge="start"
+                onClick={handleDrawerToggle}
+                sx={{ mr: 2, display: { md: 'none' } }}
+              >
+                <MenuIcon />
+              </IconButton>
+              <Typography variant="h4" noWrap component="div">
+                Task
+                <span style={{ color: '#81d4fa' }}>Flow</span>
+              </Typography>
+
+
+            </Box>
+            {/* Right-aligned icons */}
+            <Box sx={{ display: 'flex', alignItems: 'center' }}>
+
+              <IconButton color="inherit">
+                <NotificationsIcon />
+              </IconButton>
+              <IconButton color="inherit">
+                <AccountCircleIcon />
+              </IconButton>
+            </Box>
           </Toolbar>
         </AppBar>
         <Box
@@ -99,9 +118,9 @@ export default function ResponsiveDrawer() {
             sx={{
               display: { xs: 'block', md: 'none' },
               '& .MuiDrawer-paper': {
-                boxSizing: 'border-box', 
+                boxSizing: 'border-box',
                 width: drawerWidth,
-                boxShadow: '0px 4px 10px rgba(0, 0, 0, 0.2)', // Add subtle box shadow
+                boxShadow: '0px 4px 10px rgba(0, 0, 0, 0.2)',
               },
             }}
           >
@@ -112,10 +131,11 @@ export default function ResponsiveDrawer() {
             variant="permanent"
             sx={{
               display: { xs: 'none', md: 'block' },
-              '& .MuiDrawer-paper': { boxSizing: 'border-box', width: drawerWidth,
-                boxShadow: '0px 4px 10px rgba(0, 0, 0, 0.1)', // Add subtle box shadow
-
-               },
+              '& .MuiDrawer-paper': {
+                boxSizing: 'border-box',
+                width: drawerWidth,
+                boxShadow: '0px 4px 10px rgba(0, 0, 0, 0.1)',
+              },
             }}
             open
           >
@@ -135,7 +155,7 @@ export default function ResponsiveDrawer() {
           {/* Add Routes */}
           <Routes>
             <Route path="/" element={<TaskDashboard />} />
-            <Route path="/about" element={<About/>} />
+            <Route path="/about" element={<About />} />
             <Route path="/:id" element={<TaskDetails />} />
           </Routes>
         </Box>

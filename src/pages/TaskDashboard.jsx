@@ -4,10 +4,14 @@ import { useDispatch, useSelector } from 'react-redux';
 import { addTask, deleteTask, markAsCompleted, setFilter, reorderTasks } from '../store/taskSlice';
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 import { useNavigate } from 'react-router-dom';
-import NoTask from '../assets/noTasks.jpg'; // Path to your logo image file
-import NoChart from '../assets/charts.jpg'; // Path to your logo image file
-import { PieChart, Pie, Cell, ResponsiveContainer } from 'recharts'; // Importing chart components
-import './TaskDashboard.scss'; // Import the SCSS file
+import NoTask from '../assets/noTasks.jpg';
+import NoChart from '../assets/charts.jpg';
+import { PieChart, Pie, Cell, } from 'recharts';
+import './TaskDashboard.scss';
+import { CheckCircle, Delete, Edit, AddCircle, ListAlt, Assessment } from '@mui/icons-material';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'recharts';
 
 const TaskDashboard = () => {
   const [taskTitle, setTaskTitle] = useState('');
@@ -21,7 +25,6 @@ const TaskDashboard = () => {
   const filter = useSelector((state) => state.tasks.filter);
   const dispatch = useDispatch();
   const navigate = useNavigate();
-
   const handleAddTask = () => {
     if (taskTitle && taskDescription && taskDueDate) {
       const newTask = {
@@ -35,8 +38,12 @@ const TaskDashboard = () => {
       setTaskTitle('');
       setTaskDescription('');
       setTaskDueDate('');
+
+
+      toast.success('Yay! Task successfully added.');
     }
   };
+
 
   const handleDeleteTask = () => {
     if (taskToDelete !== null) {
@@ -88,6 +95,10 @@ const TaskDashboard = () => {
     { name: 'Pending', value: pendingCount },
   ];
 
+  const normalizedData = data.map((item) => ({
+    ...item,
+    value: Math.round(item.value), // Round to nearest integer
+  }));
   const openDeleteModal = (taskId) => {
     setTaskToDelete(taskId);
     setOpenModal(true);
@@ -105,35 +116,53 @@ const TaskDashboard = () => {
   return (
     <div className="task-dashboard">
       <Typography variant="h4" gutterBottom> Task Dashboard</Typography>
+      <ToastContainer />
 
       <div className="filter-search-container">
-        <FormControl fullWidth margin="normal" className="filter-section">
-          <InputLabel>Filter Tasks</InputLabel>
-          <Select value={filter} onChange={handleFilterChange}>
-            <MenuItem value="all">All Tasks</MenuItem>
-            <MenuItem value="completed">Completed Tasks</MenuItem>
-            <MenuItem value="pending">Pending Tasks</MenuItem>
-            <MenuItem value="overdue">Overdue Tasks</MenuItem>
-          </Select>
-        </FormControl>
+        <Grid container spacing={2} alignItems="center">
+          <Grid item xs={12} sm={6} md={6}>
+            <FormControl fullWidth margin="normal" className="filter-section" variant="outlined" sx={{ backgroundColor: 'white' }}>
+              <InputLabel id="filter-tasks-label">Filter Tasks</InputLabel>
+              <Select
+                labelId="filter-tasks-label"
+                value={filter}
+                onChange={handleFilterChange}
+                label="Filter Tasks"
+              >
+                <MenuItem value="all">All Tasks</MenuItem>
+                <MenuItem value="completed">Completed Tasks</MenuItem>
+                <MenuItem value="pending">Pending Tasks</MenuItem>
+                <MenuItem value="overdue">Overdue Tasks</MenuItem>
+              </Select>
+            </FormControl>
+          </Grid>
 
-        <TextField
-          label="Search Tasks"
-          variant="outlined"
-          fullWidth
-          value={searchQuery}
-          onChange={handleSearchChange}
-          margin="normal"
-          className="search-section"
-        />
+          <Grid item xs={12} sm={6} md={6}>
+            <TextField
+              label="Search Tasks"
+              variant="outlined"
+              fullWidth
+              sx={{ backgroundColor: 'white' }}
+              value={searchQuery}
+              onChange={handleSearchChange}
+              margin="normal"
+              className="search-section"
+            />
+          </Grid>
+        </Grid>
       </div>
+
 
       <Grid container spacing={2}>
         {/* Task Add Form */}
         <Grid item xs={12} sm={6} md={6}>
-          <Card className="task-card" style={{ height: '100%' }}>
+          <Card className="task-card " style={{ height: '100%' }}>
             <CardContent>
-              <Typography variant="h6" gutterBottom>Add a New Task</Typography>
+              <Typography variant="h6" gutterBottom style={{ display: 'flex', alignItems: 'center' }} className='card-title'>
+                <AddCircle style={{ marginRight: '8px' }} />
+                Add a New Task
+              </Typography>
+
               <TextField
                 label="Task Title"
                 fullWidth
@@ -141,6 +170,7 @@ const TaskDashboard = () => {
                 onChange={(e) => setTaskTitle(e.target.value)}
                 margin="normal"
               />
+              
               <TextField
                 label="Task Description"
                 fullWidth
@@ -166,109 +196,142 @@ const TaskDashboard = () => {
 
         {/* Task List */}
         <Grid item xs={12} sm={6} md={6}>
-  <Card className="task-card" style={{ height: '100%' }}>
-    <CardContent>
-      <Typography variant="h6" gutterBottom>
-        Task List ({filteredTasks.length})
-      </Typography>
-      {filteredTasks.length === 0 ? (
-        <div className="no-tasks-message" style={{ textAlign: 'center', padding: '20px' }}>
-          <img src={NoTask} alt="No tasks" style={{ width: '250px', marginBottom: '20px' }} />
-          <Typography variant="body1">No tasks available. Please add some tasks.</Typography>
-        </div>
-      ) : (
-        <DragDropContext onDragEnd={handleOnDragEnd}>
-          <Droppable droppableId="taskList">
-            {(provided) => (
-              <div
-                ref={provided.innerRef}
-                {...provided.droppableProps}
-                style={{
-                  maxHeight: '400px', // Adjust this value as needed
-                  overflowY: 'auto',  // Enables vertical scrolling
-                  paddingRight: '10px', // Prevents content from being hidden due to the scrollbar
-                }}
-              >
-                {filteredTasks.map((task, index) => (
-                  <Draggable key={task.id} draggableId={task.id.toString()} index={index}>
+          <Card className="task-card" style={{ height: '100%' }}>
+            <CardContent>
+              <Typography variant="h6" gutterBottom style={{ display: 'flex', alignItems: 'center' }} className='card-title'>
+                <ListAlt style={{ marginRight: '8px' }} />
+                Task List ({filteredTasks.length})
+              </Typography>
+              {filteredTasks.length === 0 ? (
+                <div className="no-tasks-message" style={{ textAlign: 'center', padding: '20px' }}>
+                  <img src={NoTask} alt="No tasks" style={{ width: '250px', marginBottom: '20px' }} />
+                  <Typography variant="body1">No tasks available. Please add some tasks.</Typography>
+                </div>
+              ) : (
+                <DragDropContext onDragEnd={handleOnDragEnd}>
+                  <Droppable droppableId="taskList" direction="vertical">
                     {(provided) => (
-                      <Card
+                      <div
                         ref={provided.innerRef}
-                        {...provided.draggableProps}
-                        {...provided.dragHandleProps}
-                        className="task-card"
-                        key={task.id}
+                        {...provided.droppableProps}
+                        style={{
+                          maxHeight: '400px',
+                          overflowY: 'auto',
+                          paddingRight: '10px',
+                          transition: 'all 0.2s ease-out',
+                        }}
+                        
                       >
-                        <CardContent>
-                          <Typography variant="h6">{task.title}</Typography>
-                          <Typography variant="body2">{task.description}</Typography>
-                          <Typography variant="body2" color="textSecondary">{task.dueDate}</Typography>
-                          <div className="task-actions">
-                            <Button
-                              className="mark-completed"
-                              variant="contained"
-                              onClick={() => handleMarkAsCompleted(task.id)}
-                              disabled={task.completed}
-                            >
-                              {task.completed ? 'Completed' : 'Mark as Completed'}
-                            </Button>
-                            <Button className="delete-task" variant="contained" onClick={() => openDeleteModal(task.id)}>
-                              Delete
-                            </Button>
-                            <Button className="edit-task" variant="contained" onClick={() => handleEditTask(task.id)}>
-                              Edit
-                            </Button>
-                          </div>
-                        </CardContent>
-                      </Card>
-                    )}
-                  </Draggable>
-                ))}
-              </div>
-            )}
-          </Droppable>
-        </DragDropContext>
-      )}
-    </CardContent>
-  </Card>
-</Grid>
+                        {filteredTasks.map((task, index) => (
+                          <Draggable key={task.id} draggableId={task.id.toString()} index={index}>
+                            {(provided) => (
+                              <Card
+                                ref={provided.innerRef}
+                                {...provided.draggableProps}
+                                {...provided.dragHandleProps}
+                                className=" "
+                                style={{
+                                  marginBottom: '10px', // Ensures spacing between tasks while dragging
+                                  ...provided.draggableProps.style, // This ensures smooth dragging behavior
+                                  boxSizing: 'border-box',
+                                  boxShadow:'none',
+                                  border:'0.5px solid #D3D3D3'
+                                  // Prevents layout shift during dragging
+                                }}
+                              >
+                                <CardContent >
+                                  <Typography variant="h6">{task.title}</Typography>
+                                  <Typography variant="body2">{task.description}</Typography>
+                                  <Typography variant="body2" color="textSecondary">{task.dueDate}</Typography>
+                                  <div className="task-actions">
+                                    <Button
+                                      className="mark-completed"
+                                      variant="contained"
+                                      onClick={() => handleMarkAsCompleted(task.id)}
+                                      disabled={task.completed}
+                                    >
+                                      <CheckCircle />
+                                    </Button>
 
+                                    <Button
+                                      className="delete-task"
+                                      variant="contained"
+                                      onClick={() => openDeleteModal(task.id)}
+                                    >
+                                      <Delete />
+                                    </Button>
+
+                                    <Button
+                                      className="edit-task"
+                                      variant="contained"
+                                      onClick={() => handleEditTask(task.id)}
+                                    >
+                                      <Edit />
+                                    </Button>
+                                  </div>
+                                </CardContent>
+                              </Card>
+                            )}
+                          </Draggable>
+                        ))}
+                        {provided.placeholder} {/* Ensures that the space is reserved during drag */}
+                      </div>
+                    )}
+                  </Droppable>
+                </DragDropContext>
+              )}
+            </CardContent>
+          </Card>
+        </Grid>
       </Grid>
 
       <Grid container spacing={2}>
-  <Grid item xs={12} sm={12} md={12}>
-    <Card className="task-summary-card">
-      <CardContent>
-        <Typography variant="h6" gutterBottom>Task Summary</Typography>
-        {tasks.length === 0 ? (
-          <div className="no-tasks-message" style={{ textAlign: 'center', padding: '20px' }}>
-            <img src={NoChart} alt="No tasks" style={{ width: '450px', marginBottom: '20px' }} />
-            <Typography variant="body1">No tasks available to summarize. Please add some tasks.</Typography>
-          </div>
-        ) : (
-          <div>
-            <ResponsiveContainer width="100%" height={300}>
-              <PieChart>
-                <Pie data={data} dataKey="value" nameKey="name" cx="50%" cy="50%" outerRadius={100} fill="#8884d8">
-                  <Cell fill="#82ca9d" />
-                  <Cell fill="#ff7300" />
-                </Pie>
-              </PieChart>
-            </ResponsiveContainer>
-            <div style={{ textAlign: 'center', marginTop: '20px' }}>
-              <Typography variant="body1" style={{ color: '#82ca9d' }}>
-                <strong>Completed Tasks</strong>: {completedCount}
+        {/* Task Summary */}
+        <Grid item xs={12} sm={12} md={12}>
+          <Card className="task-summary-card task-card">
+            <CardContent>
+              <Typography variant="h6" gutterBottom style={{ display: 'flex', alignItems: 'center' }} className='card-title'>
+                <Assessment style={{ marginRight: '8px' }} />
+                Task Summary
               </Typography>
-              <Typography variant="body1" style={{ color: '#ff7300' }}>
-                <strong>Pending Tasks</strong>: {pendingCount}
-              </Typography>
-            </div>
-          </div>
-        )}
-      </CardContent>
-    </Card>
-  </Grid>
-</Grid>
+              {tasks.length === 0 ? (
+                <div className="no-tasks-message" style={{ textAlign: 'center', padding: '20px' }}>
+                  <img src={NoChart} alt="No tasks" style={{ width: '450px', marginBottom: '20px' }} />
+                  <Typography variant="body1">No tasks available to summarize. Please add some tasks.</Typography>
+                </div>
+              ) : (
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap' }}>
+                  {/* Pie Chart */}
+                  <div style={{ flex: 1, minWidth: '300px', marginRight: '20px' }}>
+                    <ResponsiveContainer width="100%" height={300}>
+                      <PieChart>
+                        <Pie data={normalizedData} dataKey="value" nameKey="name" cx="50%" cy="50%" outerRadius={100} fill="#8884d8">
+                          <Cell fill="#82ca9d" />
+                          <Cell fill="#ff7300" />
+                        </Pie>
+                      </PieChart>
+                    </ResponsiveContainer>
+                  </div>
+
+                  {/* Bar Chart */}
+                  <div style={{ flex: 1, minWidth: '300px' }}>
+                    <ResponsiveContainer width="100%" height={300}>
+                      <BarChart data={normalizedData} margin={{ top: 20, right: 30, left: 0, bottom: 0 }}>
+                        <XAxis dataKey="name" />
+                        <YAxis allowDecimals={false} />
+                        <Bar dataKey="value" fill="#8884d8">
+                          <Cell fill="#82ca9d" />
+                          <Cell fill="#ff7300" />
+                        </Bar>
+                      </BarChart>
+                    </ResponsiveContainer>
+                  </div>
+                </div>
+              )}
+            </CardContent>
+          </Card>
+        </Grid>
+      </Grid>
 
 
       {/* Task Deletion Modal */}
